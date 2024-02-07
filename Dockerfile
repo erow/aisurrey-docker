@@ -27,7 +27,8 @@ RUN pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/to
 RUN python -c 'import mmcv;print(mmcv.__version__)'
 
 # Install FFCV
-RUN conda install cupy pkg-config libjpeg-turbo opencv cudatoolkit=${CUDA} numba -c pytorch -c conda-forge
+RUN conda update -y conda && conda install -y cupy compilers pkg-config libjpeg-turbo opencv cudatoolkit=${CUDA} numba -c pytorch -c conda-forge\
+    && conda clean -a
 RUN pip install ffcv \
     && pip cache purge
 

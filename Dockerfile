@@ -2,12 +2,11 @@
 ARG PYTORCH="2.1.1"
 ARG CUDA="12.1"
 ARG CUDNN="8"
-
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ=Europe/London
 
 # FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
 FROM docker.io/pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-runtime
-
-
 
 # To fix GPG key error when running apt-get update
 # RUN rm /etc/apt/sources.list.d/cuda.list \
@@ -17,20 +16,17 @@ FROM docker.io/pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-runtime
 
 # Install system dependencies for opencv-python
 
-RUN  apt update &&  apt install -y libgl1 libglib2.0-0 \
-    && apt clean 
+RUN apt update && apt install -y git 
+# libgl1 libglib2.0-0 \
+    # && apt clean\
     # && rm -rf /var/lib/apt/lists/*
-
-RUN pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html \
-    && pip cache purge
-# Verify the installation
-RUN python -c 'import mmcv;print(mmcv.__version__)'
-
 # Install FFCV
-RUN conda update -y conda && conda install -y cupy compilers pkg-config libjpeg-turbo opencv cudatoolkit=${CUDA} numba -c pytorch -c conda-forge\
+RUN conda update -y conda && conda install -y cupy compilers pkg-config "libjpeg-turbo>=3.0.0" opencv cudatoolkit=${CUDA} numba -c pytorch -c conda-forge\
     && conda clean -a
-RUN pip install ffcv \
-    && pip cache purge
+RUN git clone https://github.com/erow/ffcv.git
+RUN pip install -e ./ffcv 
+RUN git clone https://github.com/erow/vitookit.git
+RUN pip install -e  ./vitookit
 
 # useful tools
 RUN pip install timm wandb imageio pandas gin-config tqdm\

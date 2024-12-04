@@ -21,12 +21,11 @@ RUN apt update && apt install -y git
     # && apt clean\
     # && rm -rf /var/lib/apt/lists/*
 # Install FFCV
-RUN conda update -y conda && conda install -y cupy compilers pkg-config "libjpeg-turbo>=3.0.0" opencv cudatoolkit=${CUDA} numba -c pytorch -c conda-forge\
+RUN conda update -y conda && \
+conda install -y cupy compilers pkg-config "libjpeg-turbo>=3.0.0" opencv  numba -c pytorch -c conda-forge\
     && conda clean -a
 RUN git clone https://github.com/erow/ffcv.git
-RUN pip install -e ./ffcv 
-RUN git clone https://github.com/erow/vitookit.git
-RUN pip install -e  ./vitookit
+RUN pip install ./ffcv 
 
 # useful tools
 RUN pip install timm wandb imageio pandas gin-config tqdm\

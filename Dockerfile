@@ -1,6 +1,5 @@
-
 ARG PYTORCH="2.1.1"
-ARG CUDA="12.1"
+ARG CUDA="11.8"
 ARG CUDNN="8"
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Europe/London

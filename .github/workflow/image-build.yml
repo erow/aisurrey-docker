@@ -20,7 +20,7 @@ jobs:
           id: build-docker-image
           run: |
             ls -la 
-            docker build . -f Dockerfile -t erow/pytorch2:latest
+            docker build . -f Dockerfile -t erow/pytorch2:cuda11.8
         - name: push the docker image
           id: push-docker-image
-          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/pytorch2:latest
+          run: docker push ${{secrets.DOCKERHUB_USERNAME}}/pytorch2:cuda11.8
